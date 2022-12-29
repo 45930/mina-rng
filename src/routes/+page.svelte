@@ -11,10 +11,10 @@
 	<p>GET --this_base_url--/api/randomNumber/--account_public_key--</p>
 	<p>
 		EX: GET <a
-			href="http://127.0.0.1:5173/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH"
+			href="https://mina-rng.vercel.app/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH"
 			target="_blank"
 			rel="noreferrer"
-			>http://127.0.0.1:5173/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH</a
+			>https://mina-rng.vercel.app/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH</a
 		>
 	</p>
 
