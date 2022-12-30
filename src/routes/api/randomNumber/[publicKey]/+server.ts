@@ -6,11 +6,13 @@ import { isSnarkyLoaded, loadSnarky, oraclePrivateKeyStr } from '$lib/server/uti
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET(request: RequestEvent) {
+  console.log(request.params);
   if (!isSnarkyLoaded) {
     await loadSnarky();
   }
 
   const publicKey = request.params.publicKey || '';
+  console.log(publicKey);
   // const executorPublicKey = request.url.searchParams.get('executor') || '';
   // console.log(executorPublicKey);
   const rand = Math.floor(Math.random() * 1_000_000);
