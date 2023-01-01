@@ -11,12 +11,20 @@ export async function GET(request: RequestEvent) {
   }
 
   const publicKey = request.params.publicKey || '';
-  // const executorPublicKey = request.url.searchParams.get('executor') || '';
-  // console.log(executorPublicKey);
-  const rand = Math.floor(Math.random() * 1_000_000);
+  const min = Math.floor(Number(request.url.searchParams.get('min'))) || 0;
+  const max = Math.floor(Number(request.url.searchParams.get('max'))) || 999999;
+  if (max <= min) {
+    throw ("Invalid Params, max must be greater than min")
+  }
+  const range = max - min + 1;
+  const rand = Math.floor(Math.random() * range + min);
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
   const encryption = Encryption.encrypt([Field(rand)], PublicKey.fromBase58(publicKey));
-  const sig = Signature.create(oraclePrivateKey, encryption.cipherText);
+  const sig = Signature.create(oraclePrivateKey, [
+    Field(min),
+    Field(max),
+    ...encryption.cipherText
+  ]);
 
   return new Response(JSON.stringify({
     publicKey: encryption.publicKey.toJSON(),

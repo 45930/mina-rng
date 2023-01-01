@@ -1,4 +1,8 @@
 <script lang="ts">
+	import Block from '$components/content/Block.svelte';
+	import Heading from '$components/content/Head.svelte';
+	import Title from '$components/content/Title.svelte';
+
 	const exampleResponse = `
   {
     "publicKey":{
@@ -15,18 +19,18 @@
 </script>
 
 <article class="">
-	<h1 class="title">Welcom to Mina RNG</h1>
-	<p class="text-xl text-red-600">This site is under development.</p>
-	<div class="pt-5 text-justify text-slate-900 pb-2">
-		<h3 class="text-lg font-semibold pt-2">What is Mina RNG?</h3>
+	<Title>Welcome to Mina RNG</Title>
+	<Block>
+		<Heading>What is Mina RNG?</Heading>
 		<p>
 			Mina RNG is an oracle that generates random numbers for use in ZkApps on Mina. We provide
 			endpoints which can be called from your ZkApp and return data in a format usable by a snarkyJS
 			SmartContract or ZKProgram. There is a basic random number endpoint already, but we would like
 			to expand to other useful concepts like rolling multiple dice, or shuffling a collection.
-			Please reach out to contact@45930.xyz for any endpoint requests.
+			Please reach out to <a class="link-text" href="mailto:contact@45930.xyz">contact@45930.xyz</a>
+			to discuss ideas.
 		</p>
-		<h3 class="text-lg font-semibold pt-2">Why Do I Need an RNG Oracle?</h3>
+		<Heading>Why Do I Need an RNG Oracle?</Heading>
 		<p>
 			Mina smart contracts are static snark circuits. Any use case involving randomness (e.g.
 			gaming) requires that a source outside of the smart contract generates the random value. In
@@ -37,7 +41,7 @@
 			be able to decrypt the value, and then will be able to execute a method with the static
 			"random" input.
 		</p>
-		<h3 class="text-lg font-semibold pt-2">Do you use VRF?</h3>
+		<Heading>Do you use VRF?</Heading>
 		<p>
 			No, this is just Math.random based randomness. The user and smarrt contract must both trust
 			that the oracle is not colluding with the other party. We don't recommend using this oracle
@@ -48,27 +52,27 @@
 			This oracle is a side project meant to be a public good to help other devs. WE OFFER NO
 			WARRANTY OR GUARANTEE OF EXECUTION. USE AT YOUR OWN RISK.
 		</p>
-	</div>
 
-	<div class="pt-5 text-justify text-slate-900">
-		<h3 class="text-lg font-semibold pt-2">Baseline Example</h3>
+		<Heading>Example Usage</Heading>
 		<p>To get started, you need a valid Mina public key base58 encoded, and that's it.</p>
 		<p>
 			Just make a GET request to https://mina-rng.45930.xyz/api/randomNumber/$publicKey to get an
 			encrypted random integer between 0 and 999,999
 		</p>
-		<div class="pt-2">
-			<p>GET</p>
-			<a
-				class="text-blue-600 hover:text-blue-400"
-				href="https://mina-rng.45930.xyz/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH"
-				target="_blank"
-				rel="noreferrer"
-				>https://mina-rng.45930.xyz/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH</a
-			>
+		<div class="pt-2 font-mono bg-slate-200 overflow-x-scroll">
+			<p>
+				GET
+				<a
+					class="link-text"
+					href="https://mina-rng.45930.xyz/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH"
+					target="_blank"
+					rel="noreferrer"
+					>https://mina-rng.45930.xyz/api/randomNumber/B62qqPo32ULMxYW745CFdF1z8KAtxbT6Du7jnxVy2XWrBxryQeX72HH</a
+				>
+			</p>
 		</div>
 
-		<h3 class="text-lg font-semibold pt-2">Response</h3>
+		<Heading>Response</Heading>
 		<p>The response contains 3 elements:</p>
 		<ul>
 			<li>- publicKey</li>
@@ -90,25 +94,8 @@
 			The signature is just a signature of the ciphertext so that an app can confirm that this
 			oracle created the randomness and not some imposter.
 		</p>
-		<!-- 
-    pre {
-      background: #f4f4f4;
-      border: 1px solid #ddd;
-      border-left: 3px solid #f36d33;
-      color: #666;
-      page-break-inside: avoid;
-      font-family: monospace;
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 1.6em;
-      max-width: 100%;
-      overflow: auto;
-      padding: 1em 1.5em;
-      display: block;
-      word-wrap: break-word;
-  } -->
 		<pre class="font-mono bg-slate-200 text-slate-900 overflow-x-scroll m-1 p-1">
   {exampleResponse}
 </pre>
-	</div>
+	</Block>
 </article>
