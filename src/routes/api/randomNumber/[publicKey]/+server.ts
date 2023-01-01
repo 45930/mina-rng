@@ -14,8 +14,10 @@ export async function GET(request: RequestEvent) {
   const min = Math.floor(Number(request.url.searchParams.get('min'))) || 0;
   const max = Math.floor(Number(request.url.searchParams.get('max'))) || 999999;
   if (max <= min) {
-    throw ("Invalid Params, max must be greater than min")
+    throw error(400, "Invalid Params, max must be greater than min");
   }
+  console.log(min);
+  console.log(max);
   const range = max - min + 1;
   const rand = Math.floor(Math.random() * range + min);
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
