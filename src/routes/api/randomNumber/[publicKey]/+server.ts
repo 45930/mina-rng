@@ -4,6 +4,8 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { PrivateKey, Field, Encryption, Signature, PublicKey } from 'snarkyjs';
 import { isSnarkyLoaded, loadSnarky, oraclePrivateKeyStr } from '$lib/server/utils';
 
+import newrelic from 'newrelic';
+
 /** @type {import('./$types').RequestHandler} */
 export async function GET(request: RequestEvent) {
   if (!isSnarkyLoaded) {
@@ -16,8 +18,10 @@ export async function GET(request: RequestEvent) {
   if (max <= min) {
     throw error(400, "Invalid Params, max must be greater than min");
   }
-  console.log(min);
-  console.log(max);
+  newrelic.addCustomAttributes({
+    min,
+    max
+  })
   const range = max - min + 1;
   const rand = Math.floor(Math.random() * range + min);
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
