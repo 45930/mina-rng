@@ -8,7 +8,7 @@ import newrelic from 'newrelic';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET(request: RequestEvent) {
-  await newrelic.startWebTransaction(request.url.toString(), async () => {
+  const response = await newrelic.startWebTransaction(request.url.toString(), async () => {
     if (!isSnarkyLoaded) {
       await loadSnarky();
     }
@@ -42,4 +42,6 @@ export async function GET(request: RequestEvent) {
       signature: sig.toJSON()
     }));
   });
+
+  return response;
 }
