@@ -18,10 +18,13 @@ export async function GET(request: RequestEvent) {
   if (max <= min) {
     throw error(400, "Invalid Params, max must be greater than min");
   }
-  newrelic.addCustomAttributes({
-    min,
-    max
-  })
+  newrelic.recordCustomEvent(
+    'random_number_api',
+    {
+      min,
+      max
+    }
+  );
   const range = max - min + 1;
   const rand = Math.floor(Math.random() * range + min);
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
