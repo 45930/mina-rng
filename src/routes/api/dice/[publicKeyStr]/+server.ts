@@ -15,19 +15,20 @@ export async function GET(request: RequestEvent) {
     throw error(400, "Invalid Params, Public Key not valid");
   }
 
-  const min = Math.floor(Number(request.url.searchParams.get('min'))) || 0;
-  const max = Math.floor(Number(request.url.searchParams.get('max'))) || 999999;
-  if (max <= min) {
-    throw error(400, "Invalid Params, max must be greater than min");
-  }
+  const n = Math.floor(Number(request.url.searchParams.get('n'))) || 1;
+  const sides = Math.floor(Number(request.url.searchParams.get('sides'))) || 6;
 
-  const range = max - min + 1;
-  const rand = Math.floor(Math.random() * range + min);
+  const rolls: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const roll = Math.floor(Math.random() * sides) + 1;
+    rolls.push(roll);
+  }
+  console.info(`API DICE: n=${n} sides=${sides} rand=${rolls}`)
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
-  const encryption = Encryption.encrypt([Field(rand)], PublicKey.fromBase58(publicKey));
+  const encryption = Encryption.encrypt(rolls.map(f => Field(f)), publicKey);
   const sig = Signature.create(oraclePrivateKey, [
-    Field(min),
-    Field(max),
+    Field(n),
+    Field(sides),
     ...encryption.cipherText
   ]);
 
