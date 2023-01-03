@@ -10,7 +10,11 @@ export async function GET(request: RequestEvent) {
     await loadSnarky();
   }
 
-  const publicKey = request.params.publicKey || '';
+  const publicKey = PublicKey.fromBase58(request.params.publicKeyStr!);
+  if (!publicKey) {
+    throw error(400, "Invalid Params, Public Key not valid");
+  }
+
   const min = Math.floor(Number(request.url.searchParams.get('min'))) || 0;
   const max = Math.floor(Number(request.url.searchParams.get('max'))) || 999999;
   if (max <= min) {
@@ -20,7 +24,7 @@ export async function GET(request: RequestEvent) {
   const rand = Math.floor(Math.random() * range + min);
   console.info(`API RANDOM NUMBER: min=${min} max=${max} rand=${rand}`)
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
-  const encryption = Encryption.encrypt([Field(rand)], PublicKey.fromBase58(publicKey));
+  const encryption = Encryption.encrypt([Field(rand)], publicKey);
   const sig = Signature.create(oraclePrivateKey, [
     Field(min),
     Field(max),

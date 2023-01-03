@@ -4,14 +4,14 @@ import { oraclePrivateKeyStr } from '../../src/lib/server/utils.js';
 
 await isReady;
 
-const parseRequest = (async (url: string, min: number, max: number) => {
+const parseRequest = (async (url: string, n: number, sides: number) => {
   const resp = await context.fetch(url)
   const oracleData: ApiResponse = await resp.json();
   const sig: Signature = Signature.fromJSON(oracleData.signature);
   const ct: Field[] = oracleData.cipherText.split(',').map(f => Field(f));
-  const signatureInput: Field[] = [Field(min), Field(max), ...ct];
+  const signatureInput: Field[] = [Field(n), Field(sides), ...ct];
   const group: Group = Group.fromJSON(oracleData.publicKey);
-  const plaintext = Encryption.decrypt({ publicKey: group, cipherText: ct }, executorPrivateKey).toString();
+  const plaintext = Encryption.decrypt({ publicKey: group, cipherText: ct }, executorPrivateKey).toString().split(',');
   return {
     sig,
     signatureInput,
@@ -36,20 +36,26 @@ test.describe("Random Number", () => {
   });
 
   test("Default Params", async () => {
-    const min = 0;
-    const max = 999_999;
-    const { sig, signatureInput, plaintext } = await parseRequest(`http://127.0.0.1:5173/api/randomNumber/${executorPublicKey.toBase58()}`, min, max);
+    const n = 1;
+    const sides = 6;
+    const { sig, signatureInput, plaintext } = await parseRequest(`http://127.0.0.1:5173/api/dice/${executorPublicKey.toBase58()}`, n, sides);
     expect(sig.verify(oraclePublicKey, signatureInput).toBoolean()).toBeTruthy();
-    expect(Number(plaintext)).toBeGreaterThanOrEqual(min);
-    expect(Number(plaintext)).toBeLessThanOrEqual(max);
+    expect(plaintext.length).toBe(n);
+    plaintext.forEach((roll) => {
+      expect(Number(roll)).toBeGreaterThanOrEqual(1);
+      expect(Number(roll)).toBeLessThanOrEqual(sides);
+    });
   });
 
   test("Custom Params", async () => {
-    const min = 5;
-    const max = 7;
-    const { sig, signatureInput, plaintext } = await parseRequest(`http://127.0.0.1:5173/api/randomNumber/${executorPublicKey.toBase58()}?min=${min}&max=${max}`, min, max);
+    const n = 5;
+    const sides = 12;
+    const { sig, signatureInput, plaintext } = await parseRequest(`http://127.0.0.1:5173/api/dice/${executorPublicKey.toBase58()}?n=${n}&sides=${sides}`, n, sides);
     expect(sig.verify(oraclePublicKey, signatureInput).toBoolean()).toBeTruthy();
-    expect(Number(plaintext)).toBeGreaterThanOrEqual(min);
-    expect(Number(plaintext)).toBeLessThanOrEqual(max);
+    expect(plaintext.length).toBe(n);
+    plaintext.forEach((roll) => {
+      expect(Number(roll)).toBeGreaterThanOrEqual(1);
+      expect(Number(roll)).toBeLessThanOrEqual(sides);
+    });
   });
 });
