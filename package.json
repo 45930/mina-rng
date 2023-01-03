@@ -33,9 +33,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@types/newrelic": "^9.4.0",
     "dotenv": "^16.0.3",
-    "newrelic": "^9.7.4",
     "snarkyjs": "^0.7.3"
   }
 }
