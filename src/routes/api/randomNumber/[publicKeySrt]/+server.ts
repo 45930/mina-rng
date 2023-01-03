@@ -16,10 +16,9 @@ export async function GET(request: RequestEvent) {
   if (max <= min) {
     throw error(400, "Invalid Params, max must be greater than min");
   }
-  console.log(min);
-  console.log(max);
   const range = max - min + 1;
   const rand = Math.floor(Math.random() * range + min);
+  console.info(`API RANDOM NUMBER: min=${min} max=${max} rand=${rand}`)
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
   const encryption = Encryption.encrypt([Field(rand)], PublicKey.fromBase58(publicKey));
   const sig = Signature.create(oraclePrivateKey, [
