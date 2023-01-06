@@ -1,6 +1,13 @@
-# create-svelte
+# Mina RNG
+Mina RNG is a [ZK Oracle](https://docs.minaprotocol.com/zkapps/tutorials/oracle) used to provide random numbers in a ZkApp.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Usage
+The app is deployed to [mina-rng.45930.xyz](https://mina-rng.45930.xyz).  To use in an app, make network requests to the API routes
+- `/api/randomNumber`
+- `/api/dice`
+
+### Public Key
+This app will sign requests as `B62qpvpwLbLDTLQvA2EVBrX5QXmTQ7yy9442KhCj8R1zAk21LuVKtwd`
 
 ## Developing
 

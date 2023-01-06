@@ -7,12 +7,8 @@
 			value: 'Random Number'
 		},
 		{
-			href: '#',
-			value: 'Dice (Coming Soon!)'
-		},
-		{
-			href: '#',
-			value: 'Shuffle (Coming Soon!)'
+			href: '/docs/api/dice',
+			value: 'Dice'
 		}
 	];
 </script>
