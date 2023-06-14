@@ -2,12 +2,15 @@ import { error } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 
 import { PrivateKey, Field, Encryption, Signature, PublicKey } from 'snarkyjs';
-import { oraclePrivateKeyStr } from '../../../../lib/server/utils.js';
+import { isSnarkyLoaded, loadSnarky, oraclePrivateKeyStr } from '$lib/server/utils';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET(request: RequestEvent) {
-  const requestPublicKey = request.params.publicKeyStr || '';
-  const publicKey = PublicKey.fromBase58(requestPublicKey);
+  if (!isSnarkyLoaded) {
+    await loadSnarky();
+  }
+
+  const publicKey = PublicKey.fromBase58(request.params.publicKeyStr!);
   if (!publicKey) {
     throw error(400, "Invalid Params, Public Key not valid");
   }
