@@ -1,8 +1,6 @@
 import { test, expect, request, type APIRequestContext } from '@playwright/test';
-import { Field, isReady, PrivateKey, PublicKey, Signature, Encryption, Group } from 'snarkyjs';
+import { Field, PrivateKey, PublicKey, Signature, Encryption, Group } from 'snarkyjs';
 import { oraclePrivateKeyStr } from '../../src/lib/server/utils.js';
-
-await isReady;
 
 const parseRequest = (async (url: string, min: number, max: number) => {
   const resp = await context.fetch(url)
