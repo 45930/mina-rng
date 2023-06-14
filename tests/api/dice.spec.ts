@@ -1,6 +1,8 @@
 import { test, expect, request, type APIRequestContext } from '@playwright/test';
-import { Field, PrivateKey, PublicKey, Signature, Encryption, Group } from 'snarkyjs';
+import { Field, isReady, PrivateKey, PublicKey, Signature, Encryption, Group } from 'snarkyjs';
 import { oraclePrivateKeyStr } from '../../src/lib/server/utils.js';
+
+await isReady;
 
 const parseRequest = (async (url: string, n: number, sides: number) => {
   const resp = await context.fetch(url)
@@ -8,14 +10,7 @@ const parseRequest = (async (url: string, n: number, sides: number) => {
   const sig: Signature = Signature.fromJSON(oracleData.signature);
   const ct: Field[] = oracleData.cipherText.split(',').map(f => Field(f));
   const signatureInput: Field[] = [Field(n), Field(sides), ...ct];
-  const group: Group | null = Group.fromJSON(oracleData.publicKey);
-  if (!group) {
-    return {
-      sig,
-      signatureInput,
-      plaintext: []
-    }
-  }
+  const group: Group = Group.fromJSON(oracleData.publicKey);
   const plaintext = Encryption.decrypt({ publicKey: group, cipherText: ct }, executorPrivateKey).toString().split(',');
   return {
     sig,

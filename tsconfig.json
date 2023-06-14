@@ -11,16 +11,10 @@
 		"strict": true,
 		"paths": {
 			"$components": [
-				"./src/lib/components/index.ts"
+				"src/lib/components/index.ts"
 			],
 			"$components/*": [
-				"./src/lib/components/*"
-			],
-			"$lib": [
-				"./src/lib"
-			],
-			"$lib/*": [
-				"./src/lib/*"
+				"src/lib/components/*"
 			]
 		}
 	}
