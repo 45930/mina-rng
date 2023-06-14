@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
+import newrelic from 'newrelic';
 
 import { PrivateKey, Field, Encryption, Signature, PublicKey } from 'snarkyjs';
 import { oraclePrivateKeyStr } from '$lib/server/utils';
@@ -20,6 +21,10 @@ export async function GET(request: RequestEvent) {
   const range = max - min + 1;
   const rand = Math.floor(Math.random() * range + min);
   console.info(`API RANDOM NUMBER: min=${min} max=${max} rand=${rand}`)
+  newrelic.recordCustomEvent(
+    'RandomNumberRequest',
+    { publicKey: requestPublicKey, min, max, rand },
+  )
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
   const encryption = Encryption.encrypt([Field(rand)], publicKey);
   const sig = Signature.create(oraclePrivateKey, [
