@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
+import newrelic from 'newrelic';
 
 import { PrivateKey, Field, Encryption, Signature, PublicKey } from 'snarkyjs';
 import { oraclePrivateKeyStr } from '$lib/server/utils';
@@ -21,6 +22,10 @@ export async function GET(request: RequestEvent) {
     rolls.push(roll);
   }
   console.info(`API DICE: n=${n} sides=${sides} rand=${rolls}`)
+  newrelic.recordCustomEvent(
+    'DiceRollRequest',
+    { publicKey: requestPublicKey, n, sides, rolls: rolls.join(', ') },
+  )
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
   const encryption = Encryption.encrypt(rolls.map(f => Field(f)), publicKey);
   const sig = Signature.create(oraclePrivateKey, [
