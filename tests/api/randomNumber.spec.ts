@@ -8,7 +8,14 @@ const parseRequest = (async (url: string, min: number, max: number) => {
   const sig: Signature = Signature.fromJSON(oracleData.signature);
   const ct: Field[] = oracleData.cipherText.split(',').map(f => Field(f));
   const signatureInput: Field[] = [Field(min), Field(max), ...ct];
-  const group: Group = Group.fromJSON(oracleData.publicKey);
+  const group: Group | null = Group.fromJSON(oracleData.publicKey);
+  if (!group) {
+    return {
+      sig,
+      signatureInput,
+      plaintext: []
+    }
+  }
   const plaintext = Encryption.decrypt({ publicKey: group, cipherText: ct }, executorPrivateKey).toString();
   return {
     sig,
