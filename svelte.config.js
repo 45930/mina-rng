@@ -7,6 +7,12 @@ const config = {
 	// for more information about preprocessors
 	preprocess: vitePreprocess(),
 
+	build: {
+		target: 'esnext'
+	},
+	csrf: {
+		checkOrigin: false,
+	},
 	kit: {
 		adapter: adapter(),
 	}
