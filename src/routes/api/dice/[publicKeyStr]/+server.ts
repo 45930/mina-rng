@@ -28,11 +28,16 @@ export async function GET(request: RequestEvent) {
   )
   const oraclePrivateKey = PrivateKey.fromBase58(oraclePrivateKeyStr);
   const encryption = Encryption.encrypt(rolls.map(f => Field(f)), publicKey);
+  console.log('oraclePrivateKey:', oraclePrivateKeyStr)
+  console.log('requestPublicKey:', requestPublicKey)
+  console.log('n, sides:', n, sides);
+  console.log('ct:', encryption.cipherText.toString());
   const sig = Signature.create(oraclePrivateKey, [
     Field(n),
     Field(sides),
     ...encryption.cipherText
   ]);
+
 
   return new Response(JSON.stringify({
     publicKey: encryption.publicKey.toJSON(),
